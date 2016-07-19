@@ -29,10 +29,10 @@ class Particle(object):
             prefix, suffix = '[', ']CC'
         else:
             prefix, suffix = '', ''
-        return prefix + str(self.name) + suffix
+        return prefix + self.name + suffix
 
     def __repr__(self):
-        return self.__str__()
+        return 'Particle(' + self.name + ', ' + str(self.cc) + ')'
 
     def __eq__(self, other):
         return all([

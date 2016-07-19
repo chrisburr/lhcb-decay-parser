@@ -2,9 +2,10 @@ from .particle import Particle
 
 
 class Decay(Particle):
-    def __init__(self, name, children, cc=False):
+    def __init__(self, name, search_type, children, cc=False):
         super(Decay, self).__init__(name, cc=cc)
         self.children = children
+        self.search_type = search_type
 
     @property
     def children(self):
@@ -14,9 +15,29 @@ class Decay(Particle):
     def children(self, children):
         self._children = children
 
+    @property
+    def search_type(self):
+        return self._search_type
+
+    @search_type.setter
+    def search_type(self, search_type):
+        self._search_type = search_type
+
     def __str__(self):
-        if self.cc:
-            prefix, suffix = '[', ']CC'
-        else:
-            prefix, suffix = '(', ')'
-        return prefix + self.name + ' -> ' + ' '.join(map(str, self.children)) + suffix
+        def convert_child(child):
+            if isinstance(child, Decay) and not child.cc:
+                return '(' + str(child) + ')'
+            else:
+                return str(child)
+
+        return (
+            ['', '['][self.cc] + self.name + ' ' +
+            self.search_type + ' ' +
+            ' '.join(map(convert_child, self.children)) + ['', ']CC'][self.cc]
+        )
+
+    def __repr__(self):
+        return (
+            'Decay(' + self.name + ', ' + self.search_type + ', ' +
+            repr(self.children) + ', ' + str(self.cc) + ')'
+        )

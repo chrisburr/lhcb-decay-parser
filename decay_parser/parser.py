@@ -16,7 +16,7 @@ def make_parser():
     particle = particle.setParseAction(lambda x: Particle(x[0]))
 
     decay = element + pp.Or(['->', '-->', '=>']) + pp.OneOrMore(element)
-    decay = decay.setParseAction(lambda x: Decay(x[0], x[2:]))
+    decay = decay.setParseAction(lambda x: Decay(x[0], x[1], x[2:]))
     decay = decay.setName('Decay')
 
     element_cc = supress('[', pp.Or([element, decay]), ']CC')
@@ -29,7 +29,7 @@ def make_parser():
         particle
     ])
 
-    return decay
+    return pp.Or([decay, element_cc])
 
 
 def supress(prefix, body, suffix):
