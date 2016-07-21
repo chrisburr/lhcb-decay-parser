@@ -2,8 +2,8 @@ from .particle import Particle
 
 
 class Decay(Particle):
-    def __init__(self, name, search_type, children, cc=False):
-        super(Decay, self).__init__(name, cc=cc)
+    def __init__(self, name, search_type, children, cc=False, marked=False):
+        super(Decay, self).__init__(name, cc=cc, marked=marked)
         self.children = children
         self.search_type = search_type
 
@@ -31,7 +31,7 @@ class Decay(Particle):
                 return str(child)
 
         return (
-            ['', '['][self.cc] + self.name + ' ' +
+            ['', '^'][self.marked] + ['', '['][self.cc] + self.name + ' ' +
             self.search_type + ' ' +
             ' '.join(map(convert_child, self.children)) + ['', ']CC'][self.cc]
         )
