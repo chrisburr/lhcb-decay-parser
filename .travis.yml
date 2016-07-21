@@ -1,0 +1,29 @@
+# travis-ci.org build & test configuration
+language: python
+
+python:
+    - "2.7"
+    - "3.3"
+    - "3.4"
+    - "3.5"
+
+install:
+    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda create --yes -n test_env python="$TRAVIS_PYTHON_VERSION" pip nose pyparsing
+    - source ~/miniconda/bin/activate test_env
+    - pip install coverage coveralls
+
+script:
+    - make test-coverage
+
+after_success:
+    - coveralls
+
+cache: apt
+
+notifications:
+    email: false
