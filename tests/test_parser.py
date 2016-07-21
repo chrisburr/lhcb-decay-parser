@@ -7,99 +7,107 @@ from decay_parser import Particle as P
 
 def test_basic():
     yield (try_decay,
-           'a -> b',
-           D(P('a'), '->', [P('b')]))
+           'D0 -> K-',
+           D(P('D0'), '->', [P('K-')]))
     yield (try_decay,
-           'a -> b c',
-           D(P('a'), '->', [P('b'), P('c')]))
+           'D0 -> K- pi+',
+           D(P('D0'), '->', [P('K-'), P('pi+')]))
     yield (try_decay,
-           'a -> b c d',
-           D(P('a'), '->', [P('b'), P('c'), P('d')]))
+           'D0 -> K- pi+ K+',
+           D(P('D0'), '->', [P('K-'), P('pi+'), P('K+')]))
 
 
 def test_charge_conjugation():
     yield (try_decay,
-           '[a -> b c d]CC',
-           cc(D(P('a'), '->', [P('b'), P('c'), P('d')])))
+           '[D0 -> K- pi+ K+]CC',
+           cc(D(P('D0'), '->', [P('K-'), P('pi+'), P('K+')])))
 
     yield (try_decay,
-           '[a]CC -> b c d',
-           D(cc(P('a')), '->', [P('b'), P('c'), P('d')]))
+           '[D0]CC -> K- pi+ K+',
+           D(cc(P('D0')), '->', [P('K-'), P('pi+'), P('K+')]))
     yield (try_decay,
-           'a -> [b]CC c d',
-           D(P('a'), '->', [cc(P('b')), P('c'), P('d')]))
+           'D0 -> [K-]CC pi+ K+',
+           D(P('D0'), '->', [cc(P('K-')), P('pi+'), P('K+')]))
     yield (try_decay,
-           'a -> b [c]CC d',
-           D(P('a'), '->', [P('b'), cc(P('c')), P('d')]))
+           'D0 -> K- [pi+]CC K+',
+           D(P('D0'), '->', [P('K-'), cc(P('pi+')), P('K+')]))
     yield (try_decay,
-           'a -> b c [d]CC',
-           D(P('a'), '->', [P('b'), P('c'), cc(P('d'))]))
+           'D0 -> K- pi+ [K+]CC',
+           D(P('D0'), '->', [P('K-'), P('pi+'), cc(P('K+'))]))
 
     yield (try_decay,
-           'a -> [b]CC [c]CC [d]CC',
-           D(P('a'), '->', [cc(P('b')), cc(P('c')), cc(P('d'))]))
+           'D0 -> [K-]CC [pi+]CC [K+]CC',
+           D(P('D0'), '->', [cc(P('K-')), cc(P('pi+')), cc(P('K+'))]))
     yield (try_decay,
-           '[a]CC -> [b]CC [c]CC [d]CC',
-           D(cc(P('a')), '->', [cc(P('b')), cc(P('c')), cc(P('d'))]))
+           '[D0]CC -> [K-]CC [pi+]CC [K+]CC',
+           D(cc(P('D0')), '->', [cc(P('K-')), cc(P('pi+')), cc(P('K+'))]))
 
 
 def test_nested():
     yield (try_decay,
-           'a -> b k [cc -> d]CC',
-           D(P('a'), '->', [P('b'), P('k'), cc(D(P('cc'), '->', [P('d')]))]))
+           'D0 -> K- K+ [phi(1020) -> K- K+]CC',
+           D(P('D0'), '->', [
+                P('K-'),
+                P('K+'),
+                cc(D(P('phi(1020)'), '->', [P('K-'), P('K+')]))
+           ]))
 
     yield (try_decay,
-           'a -> b k (cc -> d)',
-           D(P('a'), '->', [P('b'), P('k'), D(P('cc'), '->', [P('d')])]))
+           'D0 -> K- K+ (phi(1020) -> K+ K-)',
+           D(P('D0'), '->', [
+                P('K-'),
+                P('K+'),
+                D(P('phi(1020)'), '->', [P('K+'), P('K-')])
+           ]))
 
 
 def test_marked():
     yield (try_decay,
-           'a -> ^b c d',
-           D(P('a'), '->', [mark(P('b')), P('c'), P('d')]))
+           'D0 -> ^K- pi+ K+',
+           D(P('D0'), '->', [mark(P('K-')), P('pi+'), P('K+')]))
 
     yield (try_decay,
-           'a -> ^b c d',
-           D(P('a'), '->', [mark(P('b')), P('c'), P('d')]))
+           'D0 -> ^K- pi+ K+',
+           D(P('D0'), '->', [mark(P('K-')), P('pi+'), P('K+')]))
 
     yield (try_decay,
-           'a -> ^b c d',
-           D(P('a'), '->', [mark(P('b')), P('c'), P('d')]))
+           'D0 -> ^K- pi+ K+',
+           D(P('D0'), '->', [mark(P('K-')), P('pi+'), P('K+')]))
 
     yield (try_decay,
-           'a -> ^[b]CC c d',
-           D(P('a'), '->', [mark(cc(P('b'))), P('c'), P('d')]))
+           'D0 -> ^[K-]CC pi+ K+',
+           D(P('D0'), '->', [mark(cc(P('K-'))), P('pi+'), P('K+')]))
 
     yield (try_decay,
-           'a -> ^[b -> e f]CC c d',
-           D(P('a'), '->', [
-                mark(cc(D(P('b'), '->', [P('e'), P('f')]))),
-                P('c'),
-                P('d')
+           'D0 -> ^[K- -> pi0 gamma]CC pi+ K+',
+           D(P('D0'), '->', [
+                mark(cc(D(P('K-'), '->', [P('pi0'), P('gamma')]))),
+                P('pi+'),
+                P('K+')
            ]))
 
     yield (try_decay,
-           'a -> ^[b -> ^e f]CC c d',
-           D(P('a'), '->', [
-                mark(cc(D(P('b'), '->', [mark(P('e')), P('f')]))),
-                P('c'),
-                P('d')
+           'D0 -> ^[K- -> ^pi0 gamma]CC pi+ K+',
+           D(P('D0'), '->', [
+                mark(cc(D(P('K-'), '->', [mark(P('pi0')), P('gamma')]))),
+                P('pi+'),
+                P('K+')
            ]))
 
     yield (try_decay,
-           'a -> ^[b -> ^[e]CC f]CC c d',
-           D(P('a'), '->', [
-                mark(cc(D(P('b'), '->', [mark(cc(P('e'))), P('f')]))),
-                P('c'),
-                P('d')
+           'D0 -> ^[K- -> ^[pi0]CC gamma]CC pi+ K+',
+           D(P('D0'), '->', [
+                mark(cc(D(P('K-'), '->', [mark(cc(P('pi0'))), P('gamma')]))),
+                P('pi+'),
+                P('K+')
            ]))
 
     yield (try_decay,
-           'a -> ^[b -> ^[e]CC ^f]CC c d',
-           D(P('a'), '->', [
-                mark(cc(D(P('b'), '->', [mark(cc(P('e'))), mark(P('f'))]))),
-                P('c'),
-                P('d')
+           'D0 -> ^[K- -> ^[pi0]CC ^gamma]CC pi+ K+',
+           D(P('D0'), '->', [
+                mark(cc(D(P('K-'), '->', [mark(cc(P('pi0'))), mark(P('gamma'))]))),
+                P('pi+'),
+                P('K+')
            ]))
 
 

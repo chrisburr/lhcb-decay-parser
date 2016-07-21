@@ -9,10 +9,14 @@ __all__ = [
 ]
 
 
-def make_parser():
+def make_parser(particles, symbols):
+    # Make the inputs to the parser
+    particle_literals = map(lambda s: pp.Literal(s).setName(s), particles.keys())
+
+    # Make the parser
     element = pp.Forward().setName('Element')
 
-    particle = pp.Word(pp.alphanums).setName('Particle')
+    particle = pp.Or(particle_literals).setName('Particle')
     particle = particle.setParseAction(lambda x: Particle(x[0]))
 
     decay = element + pp.Or(['->', '-->', '=>']) + pp.OneOrMore(element)
