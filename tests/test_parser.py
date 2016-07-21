@@ -66,6 +66,10 @@ def test_marked():
            'a -> ^b c d',
            D(P('a'), '->', [mark(P('b')), P('c'), P('d')]))
 
+    yield (try_decay,
+           'a -> ^[b]CC c d',
+           D(P('a'), '->', [mark(cc(P('b'))), P('c'), P('d')]))
+
 
 def try_decay(decay, result):
     assert_equal(parse_decay(decay), result)

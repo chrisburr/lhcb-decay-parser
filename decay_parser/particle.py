@@ -46,7 +46,12 @@ class Particle(object):
         return ['', '^'][self.marked] + prefix + self.name + suffix
 
     def __repr__(self):
-        return 'Particle(' + self.name + ', ' + str(self.cc) + ')'
+        return (
+            'Particle(' +
+            self.name + ', ' +
+            str(self.cc) + ', ' +
+            str(self.marked) + ')'
+        )
 
     def __eq__(self, other):
         return all([
