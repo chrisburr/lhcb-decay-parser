@@ -70,6 +70,38 @@ def test_marked():
            'a -> ^[b]CC c d',
            D(P('a'), '->', [mark(cc(P('b'))), P('c'), P('d')]))
 
+    yield (try_decay,
+           'a -> ^[b -> e f]CC c d',
+           D(P('a'), '->', [
+                mark(cc(D(P('b'), '->', [P('e'), P('f')]))),
+                P('c'),
+                P('d')
+           ]))
+
+    yield (try_decay,
+           'a -> ^[b -> ^e f]CC c d',
+           D(P('a'), '->', [
+                mark(cc(D(P('b'), '->', [mark(P('e')), P('f')]))),
+                P('c'),
+                P('d')
+           ]))
+
+    yield (try_decay,
+           'a -> ^[b -> ^[e]CC f]CC c d',
+           D(P('a'), '->', [
+                mark(cc(D(P('b'), '->', [mark(cc(P('e'))), P('f')]))),
+                P('c'),
+                P('d')
+           ]))
+
+    yield (try_decay,
+           'a -> ^[b -> ^[e]CC ^f]CC c d',
+           D(P('a'), '->', [
+                mark(cc(D(P('b'), '->', [mark(cc(P('e'))), mark(P('f'))]))),
+                P('c'),
+                P('d')
+           ]))
+
 
 def try_decay(decay, result):
     assert_equal(parse_decay(decay), result)
