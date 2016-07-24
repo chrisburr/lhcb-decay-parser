@@ -6,6 +6,7 @@ import json
 from .decay import Decay
 from .particle import Particle
 from .parser import make_parser
+from . import utils
 
 
 __all__ = [
@@ -13,7 +14,8 @@ __all__ = [
     'Particle',
     'parse_decay',
     'particles',
-    'symbols'
+    'symbols',
+    'utils'
 ]
 
 
