@@ -150,7 +150,7 @@ if __name__ == '__main__':
     # Find the valid symbols
     symbols = {}
     for name, func, description, cc in get_valid_symbols().values():
-        symbols = Symbol(
+        symbols[name] = Symbol(
             name=name,
             cc=cc,
             description=description,
